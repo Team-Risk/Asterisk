@@ -717,7 +717,7 @@ bot.on('interactionCreate', async (interaction) => {
                         if (skip === false) {
                         if (redeemedList[i].user === interaction.user.id) {
                             if (redeemedList[i].server === interaction.guild.id) {
-                                interaction.reply(`\<:risksunglassesmute:1223149081992626258> You already redeemed your code for this **${interaction.guild.name}** giveaway. Wait for the next one!\n-# If you believe this was an error, contact **RISK Esports** support.`)
+                                interaction.reply({content: `\<:risksunglassesmute:1223149081992626258> You already redeemed your code for this **${interaction.guild.name}** giveaway. Wait for the next one!\n-# If you believe this was an error, contact **RISK Esports** support.`, ephemeral:true})
                                 return
                             }
                         }
@@ -765,7 +765,7 @@ bot.on('interactionCreate', async (interaction) => {
                            globalCodeDBUpdate(bot)
                             return
                         } else {
-                            interaction.reply('\<a:asterisklogglobe:1277892414513877037> Looks like there are no more codes in the code pool! Check again later.')
+                            interaction.reply({content: '\<a:asterisklogglobe:1277892414513877037> Looks like there are no more codes in the code pool! Check again later.', ephemeral:true})
                             return
                         }
             
@@ -826,7 +826,7 @@ bot.on('interactionCreate', async (interaction) => {
                         for (let i = 0; i < redeemedList.length; i++) {
                             if (redeemedList[i].user === interaction.user.id) {
                                 if (redeemedList[i].server === interaction.guild.id) {
-                                    interaction.reply(`\<a:asteriskdeep:1277887470414860343> You already redeemed your code for this **${interaction.guild.name}** giveaway. Wait for the next one!\n-# If you believe this was an error contact RISK support.`)
+                                    interaction.reply({content: `\<:risksunglassesmute:1223149081992626258> You already redeemed your code for this **${interaction.guild.name}** giveaway. Wait for the next one!\n-# If you believe this was an error, contact **RISK Esports** support.`, ephemeral:true})
                                     return
                                 }
                             }
@@ -868,7 +868,7 @@ bot.on('interactionCreate', async (interaction) => {
                                globalCodeDBUpdate(bot)
                                 return
                             } else {
-                                interaction.reply('Looks like there are no more codes in the code pool! Check again later.')
+                                interaction.reply({content: '\<a:asterisklogglobe:1277892414513877037> Looks like there are no more codes in the code pool! Check again later.', ephemeral:true})
                                 return
                             }
                 
