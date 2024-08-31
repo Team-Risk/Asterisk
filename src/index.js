@@ -80,11 +80,9 @@ const bot = new Client({
         IntentsBitField.Flags.MessageContent
     ],
 });
-let codeAmount = 0
 let liveCodeList = []
 let eventlist = []
 let logChannelID = process.env.CONSOLEID
-let eventChannelID = "1242053031109857301" //#RISKIANTS
 let indexer = 0
 waitertext = "plcehold"
 
