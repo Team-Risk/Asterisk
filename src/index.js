@@ -84,6 +84,7 @@ let liveCodeList = []
 let eventlist = []
 let logChannelID = process.env.CONSOLEID
 let indexer = 0
+let deletedamnt = 0
 waitertext = "plcehold"
 
 function codeParse(codeshere) {
@@ -241,18 +242,18 @@ bot.on('interactionCreate', async (interaction) => {
                 } catch (error) {
 
                 }
-                let deletedamnt = 0
+                
 
 
                 try {
-                    for (let i = 0; i < asyncCodeList.length; i++) {
+                    for (let i = 0; i <= asyncCodeList.length; i++) {
                        if (asyncCodeList[i].server === interaction.guild.id) {
                             asyncCodeList.splice(i, 1)
                             console.log('testst')
-                            deletedamnt++
+                            deletedamnt = deletedamnt + 1
                    }}
                 } catch (error) {
-                    console.log(err)
+                    
                 }
 
                 globalCodeDBUpdate(bot)
@@ -260,8 +261,8 @@ bot.on('interactionCreate', async (interaction) => {
                 }
 
                 setTimeout(() => {
-                    interaction.reply(`\<a:asteriskcorrect:1277899443898941500> You have cleared **${bbbb}** codes from the codepool.`)
-                    guildLog(bot, interaction, `\\<a:asterisklogglobe:1277892414513877037> **${interaction.user.username}** has CLEARED the codelist of **${bbbb}** codes.`)
+                    interaction.reply(`\<a:asteriskcorrect:1277899443898941500> You have cleared **${deletedamnt}** codes from the codepool.`)
+                    guildLog(bot, interaction, `\<a:asterisklogglobe:1277892414513877037> **${interaction.user.username}** has CLEARED the codelist of **${deletedamnt}** codes.`)
                     
                 }, 1000);
             
@@ -942,13 +943,21 @@ bot.on('interactionCreate', async (interaction) => {
                     i++;
                 }
                 formattedlist = formattedlist.join("\n")
-                try {
+                
+
+                let _qub = `\<a:asteriskdeep:1277887470414860343> **${liveCodeList.length}** ` + 'codes are currently in the pool for the ' + `**${interaction.guild.name}** code database.\n${formattedlist}`
+
+
+
+                if (_qub.length < 2000) {
                 interaction.reply({content: `\<a:asteriskdeep:1277887470414860343> **${liveCodeList.length}** ` + 'codes are currently in the pool for the ' + `**${interaction.guild.name}** code database.\n${formattedlist}`, ephemeral: true});
                 return
-                } catch (err) {
+                } else {
                     interaction.reply({content: `\<a:asteriskdeep:1277887470414860343> **${liveCodeList.length}** ` + 'codes are currently in the pool for the ' + `**${interaction.guild.name}** code database. **Too many codes to display in one message!**`, ephemeral: true});
                     return
                 }
+                
+                
                 
 
 
@@ -1254,12 +1263,14 @@ bot.on('messageCreate', async (message) => {
         globalCodeDBUpdate(bot)
 
 
-
-        message.reply('\<a:asteriskcorrect:1277899443898941500> You have added codes to the pool. There are now ' +`**${largos}**` + ' codes recognized and pushed to the giveaway pool. Use /codecheck to check the code database.\n-# Members can now use **/riskreward** to redeem one code from your codepool. If you want individuals who have already redeemed a code to be able to another code again, simply use **/resetgiveaway.** Its common practice to use this command after submitting new codes to the codepool.');
-        
+        if (largos > 100) {
+        message.reply('\<a:asteriskcorrect:1277899443898941500> You have added codes to the pool. ||Large amount of codes detected; You are at RISK of data loss, as Asterisk is having database issues currently. *Back up your codes*|| There are now ' +`**${largos}**` + ' codes recognized and pushed to the giveaway pool. Use /codecheck to check the code database.\n-# Members can now use **/riskreward** to redeem one code from your codepool. If you want individuals who have already redeemed a code to be able to another code again, simply use **/resetgiveaway.** Its common practice to use this command after submitting new codes to the codepool.');
+        } else {
+            message.reply('\<a:asteriskcorrect:1277899443898941500> You have added codes to the pool. There are now ' +`**${largos}**` + ' codes recognized and pushed to the giveaway pool. Use /codecheck to check the code database.\n-# Members can now use **/riskreward** to redeem one code from your codepool. If you want individuals who have already redeemed a code to be able to another code again, simply use **/resetgiveaway.** Its common practice to use this command after submitting new codes to the codepool.');
+        }
         waitertext = undefined
         setTimeout(() => {
-           message.delete()
+           //message.delete()
         }, 10);
         return
        
