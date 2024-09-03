@@ -70,7 +70,7 @@ let adminRole = "1242054030969147422"
 
 
 
-lackpermmsg = "\<a:asteriskdeep:1277887470414860343> You do not meet the permissions or trusted role to perform this command!\n-# Message to server admins: set up trusted roles, log channels, and more, via **/debugsetup.**"
+lackpermmsg = "\<a:asteriskdeep:1277887470414860343> You do not meet the permissions or trusted role to perform this command!\n-# Message to server admins: set up trusted roles, log channels, and more, via **/asterisksetup.**"
 
 const bot = new Client({
     intents: [
@@ -321,10 +321,20 @@ bot.on('interactionCreate', async (interaction) => {
     }
 
 
-    if (interaction.commandName === "debugsetup") {
+    if (interaction.commandName === "debugsetup" || "asterisksetup") {
         // THERE NEEDS TO BE A PERMISSION CHECK IN THE FUTURE
+        try {
+        for (i = 0; i < globaloptionsList.length; i++) {
+            if (globaloptionsList[i].server === interaction.guild.id) {
+                if (interaction.member.roles.cache.has(globaloptionsList[i].trustedrole)) {
+            
+                } else {
+                    interaction.reply(lackpermmsg)
+                    return
+                }}}
+            } catch (err) {
 
-
+            }
         for (let i = 0; i < globaloptionsList.length; i++) {
             console.log(globaloptionsList[i])
             console.log(interaction.guild.id)
@@ -457,25 +467,34 @@ bot.on('interactionCreate', async (interaction) => {
     if (interaction.commandName === 'freeforall') {
         permChecks(interaction)
 
-
+        try {
         for (i = 0; i < freeforalls.length; i++) {
-            if (freeforalls[i].boolean === true) {
+            console.log(freeforalls[i].boolean)
+            if (freeforalls[i].server === interaction.guild.id) {
 
-                if (freeforalls[i].server === interaction.guild.id) {
+            if (freeforalls[i].boolean === true) {
+                freeforalls[i].boolean = false
+                
                 interaction.reply('\<a:asteriskcorrect:1277899443898941500> Free for all mode has been disabled.')
                 guildLog(bot, interaction, `\<a:asteriskcorrect:1277899443898941500> ${interaction.user} has DISABLED free for all mode.`)
-                freeforalls[i].boolean = false
+                
                 return
 
-                }
+                
             } else if (freeforalls[i].boolean === false)  {
+                freeforalls[i].boolean = true
+
                 interaction.reply('\<a:asteriskcorrect:1277899443898941500> **Free for all mode** has been **ENABLED** temporarily. GO HAM! \n-# Members can now use the **/riskreward** command as much as they would like.')
                 guildLog(bot, interaction, `\<a:asteriskcorrect:1277899443898941500> ${interaction.user} has ENABLED free for all mode.`)
-
+               
                 return
 
             }
         }
+        }
+    } catch (err) {
+        return
+    }
         ffa = new Object()
         ffa.boolean = true
         ffa.server = interaction.guild.id
@@ -824,7 +843,16 @@ bot.on('interactionCreate', async (interaction) => {
                         }
                 
 
+                        for (let i = 0; i < freeforalls.length; i++) {
+                            if (freeforalls[i].server === interaction.guild.id) {
+                                if (freeforalls[i].boolean === true) {
+                                    skip = true
+                                }
+                            }
+                        }
+    
                         for (let i = 0; i < redeemedList.length; i++) {
+                            if (skip === false) {
                             if (redeemedList[i].user === interaction.user.id) {
                                 if (redeemedList[i].server === interaction.guild.id) {
                                     interaction.reply({content: `\<:risksunglassesmute:1223149081992626258> You already redeemed your code for this **${interaction.guild.name}** giveaway. Wait for the next one!\n-# If you believe this was an error, contact **RISK Esports** support.`, ephemeral:true})
@@ -832,6 +860,9 @@ bot.on('interactionCreate', async (interaction) => {
                                 }
                             }
                         }
+                    }
+
+                        
                         if (interaction.user.redeemed != true || undefined) {
                             console.log(liveCodeList);
                             logtest = liveCodeList[0] + ''
@@ -982,7 +1013,7 @@ bot.on('interactionCreate', async (interaction) => {
         if (trustRole) {
             
         } }catch (err) {
-            interaction.reply('**\<:riskendear:1263766651724238858> Seems like an administrator has not set up the bot correctly yet for this command to be used** *(error: no trusted role set).* || Message to administrators: use /debugsetup to setup everything and fix this issue. || \n-# Refer to **riskesports.org/asterisk** for further documentation.')
+            interaction.reply('**\<:riskendear:1263766651724238858> Seems like an administrator has not set up the bot correctly yet for this command to be used** *(error: no trusted role set).* || Message to administrators: use /asterisksetup to setup everything and fix this issue. || \n-# Refer to **riskesports.org/asterisk** for further documentation.')
             return
         }
         if (interaction.member.roles.cache.has(trustRole)) {
